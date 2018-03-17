@@ -9,6 +9,9 @@ APickup::APickup()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	//All pickups start active
+	bIsActive = true;
+
 	//Create a static mesh component
 	PickupMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PickupMesh"));
 	RootComponent = PickupMesh;
@@ -26,5 +29,17 @@ void APickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+//Returns active state of pickup
+bool APickup::IsActive()
+{
+	return bIsActive;
+}
+
+//Changes the state of the pickup
+void APickup::SetActive(bool NewPickupState)
+{
+	bIsActive = NewPickupState;
 }
 
