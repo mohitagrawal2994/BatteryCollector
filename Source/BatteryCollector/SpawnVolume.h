@@ -19,6 +19,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	//The pickup to spawn
+	UPROPERTY(EditAnywhere, Category = "Spawning")
+	TSubclassOf<class APickup>WhatToSpawn;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -35,5 +39,8 @@ private:
 	//The Box component to specify where the pickups are to be spawned
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Spawning", meta=(AllowPrivateAccess="true"))
 	class UBoxComponent* WhereToSpawn;
+
+	//Handle spawning of the pickup
+	void SpawnPickup();
 	
 };

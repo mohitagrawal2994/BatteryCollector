@@ -3,6 +3,8 @@
 #include "SpawnVolume.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Engine/World.h"
+#include "Pickup.h"
 
 
 // Sets default values
@@ -35,5 +37,34 @@ FVector ASpawnVolume::GetRandomPointInVolume()
 	FVector SpawnOrigin=WhereToSpawn->Bounds.Origin;
 	FVector SpawnExtent= WhereToSpawn->Bounds.BoxExtent;
 	return UKismetMathLibrary::RandomPointInBoundingBox(SpawnOrigin, SpawnExtent);
+}
+
+void ASpawnVolume::SpawnPickup()
+{
+	//Check if we have set something to spawn
+	if (WhatToSpawn != NULL)
+	{
+		//Check for a valid world
+		UWorld* const World = GetWorld();
+		if (World)
+		{
+			//Set The Spawn Parameters
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = Instigator;
+
+			//Get a random location to spawn the actor
+			FVector SpawnLocation = GetRandomPointInVolume();
+
+			//Adding a random rotation to the object
+			FRotator SpawnRotation;
+			SpawnRotation.Yaw = FMath::FRand() * 360.0f;
+			SpawnRotation.Pitch = FMath::FRand() * 360.0f;
+			SpawnRotation.Roll = FMath::FRand() * 360.0f;
+
+			//Spawn The Pickup
+			APickup* const SpawnedPickup = World->SpawnActor<APickup>(WhatToSpawn, SpawnLocation, SpawnRotation, SpawnParams);
+		}
+	}
 }
 
