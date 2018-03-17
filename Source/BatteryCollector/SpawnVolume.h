@@ -23,6 +23,16 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Spawning")
 	TSubclassOf<class APickup>WhatToSpawn;
 
+	FTimerHandle SpawnTimer;
+
+	//Min Spawn Delay
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+	float SpawnDelayRangeLow;
+	
+	//Max Spawn Delay
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+	float SpawnDelayRangeHigh;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -43,4 +53,6 @@ private:
 	//Handle spawning of the pickup
 	void SpawnPickup();
 	
+	//The Current Spawn Delay
+	float SpawnDelay;
 };

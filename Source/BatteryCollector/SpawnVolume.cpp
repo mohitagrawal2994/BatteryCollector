@@ -5,6 +5,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/World.h"
 #include "Pickup.h"
+#include "TimerManager.h"
 
 
 // Sets default values
@@ -16,6 +17,10 @@ ASpawnVolume::ASpawnVolume()
 	//Creates the box component to represent the spawn volume
 	WhereToSpawn = CreateDefaultSubobject<UBoxComponent>(TEXT("WhereToSpawn"));
 	RootComponent = WhereToSpawn;
+
+	//Set The Spawn Delay Range
+	SpawnDelayRangeLow = 1.0f;
+	SpawnDelayRangeHigh = 4.5f;
 }
 
 // Called when the game starts or when spawned
@@ -23,6 +28,8 @@ void ASpawnVolume::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	SpawnDelay = FMath::FRandRange(SpawnDelayRangeLow, SpawnDelayRangeHigh);
+	GetWorldTimerManager().SetTimer(SpawnTimer, this, &ASpawnVolume::SpawnPickup, SpawnDelay, false);
 }
 
 // Called every frame
@@ -64,6 +71,9 @@ void ASpawnVolume::SpawnPickup()
 
 			//Spawn The Pickup
 			APickup* const SpawnedPickup = World->SpawnActor<APickup>(WhatToSpawn, SpawnLocation, SpawnRotation, SpawnParams);
+
+			SpawnDelay = FMath::FRandRange(SpawnDelayRangeLow, SpawnDelayRangeHigh);
+			GetWorldTimerManager().SetTimer(SpawnTimer, this, &ASpawnVolume::SpawnPickup, SpawnDelay, false);
 		}
 	}
 }
