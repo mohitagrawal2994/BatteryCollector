@@ -50,6 +50,10 @@ ABatteryCollectorCharacter::ABatteryCollectorCharacter()
 	CollectionSphere->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 	CollectionSphere->SetSphereRadius(200.0f);
 
+	//Base Power Level
+	InitialPower = 2000.0f;
+	CharacterPower = InitialPower; 
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -109,6 +113,22 @@ void ABatteryCollectorCharacter::CollectPickups()
 	}
 }
 
+//Reports Starting Power
+float ABatteryCollectorCharacter::GetInitialPower()
+{
+	return InitialPower;
+}
+
+//Reports Current Power
+float ABatteryCollectorCharacter::GetCurrentPower()
+{
+	return CharacterPower;
+}
+
+void ABatteryCollectorCharacter::UpdatePower(float PowerCharge)
+{
+	CharacterPower = CharacterPower + PowerCharge;
+}
 
 void ABatteryCollectorCharacter::OnResetVR()
 {

@@ -72,6 +72,15 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Pickups")
 	void CollectPickups();
 
+	//Starting Power Level of The Character
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Power")
+	float InitialPower;
+
+private:
+	//Current Power Level of Character
+	UPROPERTY(VisibleAnywhere, Category = "Power")
+	float CharacterPower;
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -80,6 +89,18 @@ public:
 
 	/** Returns CollectionSphere subobject **/
 	FORCEINLINE class USphereComponent* GetCollectionSphere() const { return CollectionSphere; }
+
+	//Accessor Function for initial power
+	UFUNCTION(BlueprintPure, Category="Power")
+	float GetInitialPower();
+
+	//Accessor Function for current Power
+	UFUNCTION(BlueprintPure, Category = "Power")
+	float GetCurrentPower();
+
+	//Function to update the character Power
+	UFUNCTION(BlueprintCallable, Category="Power")
+	void UpdatePower(float PowerCharge);
 
 };
 
