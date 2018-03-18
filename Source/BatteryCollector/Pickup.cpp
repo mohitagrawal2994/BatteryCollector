@@ -43,3 +43,10 @@ void APickup::SetActive(bool NewPickupState)
 	bIsActive = NewPickupState;
 }
 
+//Defines what happens after the pickup is collected
+void APickup::WasCollected_Implementation()
+{
+	//Log a debug message
+	FString PickupDebugString = GetName();
+	UE_LOG(LogClass, Log, TEXT("You Have Collected %s"), *PickupDebugString);
+}
