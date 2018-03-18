@@ -9,6 +9,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/SphereComponent.h"
+#include "Pickup.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ABatteryCollectorCharacter
@@ -80,6 +81,32 @@ void ABatteryCollectorCharacter::SetupPlayerInputComponent(class UInputComponent
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ABatteryCollectorCharacter::OnResetVR);
+
+	//Collect Binfding
+	InputComponent->BindAction("Collect", IE_Pressed, this, &ABatteryCollectorCharacter::CollectPickups);
+}
+
+void ABatteryCollectorCharacter::CollectPickups()
+{
+	//Get all overlapping actors and store them in an array
+	TArray<AActor*> CollectedActor;
+	CollectionSphere->GetOverlappingActors(CollectedActor);
+
+	//for each actor we collected
+	for (int32 i = 0; i < CollectedActor.Num(); ++i)
+	{
+		//Cast the actor to a pickup
+		APickup* const TestPickup = Cast<APickup>(CollectedActor[i]);
+
+		//If the cast is sucessfull and the pickup is valid and active
+		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->IsActive())
+		{
+			//call the pickup was collected function 
+			TestPickup->WasCollected();
+			//deactivate the pickup
+			TestPickup->SetActive(false);
+		}
+	}
 }
 
 
